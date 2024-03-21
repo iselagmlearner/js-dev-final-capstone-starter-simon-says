@@ -62,6 +62,7 @@ let roundCount = 0; // track the number of rounds that have been played so far
 
 padContainer.addEventListener("click", padHandler);
 // TODO: Add an event listener `startButtonHandler()` to startButton.
+startButton.addEventListener("click", startButtonHandler); 
 
 /**
  * EVENT HANDLERS
@@ -83,6 +84,11 @@ padContainer.addEventListener("click", padHandler);
  */
 function startButtonHandler() {
   // TODO: Write your code here.
+  maximumRoundCount = setLevel(1); 
+  roundCount =1; 
+  startButton.classList.add("hidden"); 
+  statusSpan.classList.remove("hidden"); 
+  const computer = playComputerTurn(); 
 
   return { startButton, statusSpan };
 }
@@ -139,7 +145,22 @@ function padHandler(event) {
  */
 function setLevel(level = 1) {
   // TODO: Write your code here.
-}
+  if (num = 1) {
+    return 8;
+  }
+  else if (num = 2) {
+    return 14;
+  }
+  else if (num = 3) {
+    return 20; 
+  }
+  else if (num = 4) {
+    return 31;
+  }
+  else {
+    return "Please enter level 1, 2, 3, or 4"
+  }
+}; 
 
 /**
  * Returns a randomly selected item from a given array.
