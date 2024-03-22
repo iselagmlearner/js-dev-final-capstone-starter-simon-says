@@ -89,7 +89,6 @@ function startButtonHandler() {
   startButton.classList.add("hidden"); 
   statusSpan.classList.remove("hidden"); 
   const computer = playComputerTurn(); 
-
   return { startButton, statusSpan };
 }
 
@@ -113,8 +112,10 @@ function startButtonHandler() {
 function padHandler(event) {
   const { color } = event.target.dataset;
   if (!color) return;
-
   // TODO: Write your code here.
+  const pad = pads.find((pad) => pad.color === color); 
+  pad.sound.play(); 
+  checkPress(color); 
   return color;
 }
 
@@ -145,22 +146,22 @@ function padHandler(event) {
  */
 function setLevel(level = 1) {
   // TODO: Write your code here.
-  if (num = 1) {
+  if (level === 1) {
     return 8;
   }
-  else if (num = 2) {
+  else if (level === 2) {
     return 14;
   }
-  else if (num = 3) {
+  else if (level === 3) {
     return 20; 
   }
-  else if (num = 4) {
+  else if (level  === 4) {
     return 31;
   }
   else {
     return "Please enter level 1, 2, 3, or 4"
   }
-}; 
+}  
 
 /**
  * Returns a randomly selected item from a given array.
@@ -260,8 +261,8 @@ function activatePads(sequence) {
  function playComputerTurn() {
   // TODO: Write your code here.
   padContainer.classList.add("unclickable"); 
-
-
+  setText(statusSpan, "The computer's turn..."); 
+  setText(heading, `Round ${roundCount} of ${maxRoundCount}`); 
   const randomColor = getRandomItem(pads).color; 
   computerSequence.push(randomColor); 
   activatePads(computerSequence); 
@@ -278,7 +279,7 @@ function activatePads(sequence) {
 function playHumanTurn() {
   // TODO: Write your code here.
   padContainer.classList.remove("unclickable");
-  
+  setText(statusSpan, `Player's turn: ${computerSequence.length - playerSequence.length} presses remaining`); 
 }
 
 /**
@@ -305,6 +306,16 @@ function playHumanTurn() {
  */
 function checkPress(color) {
   // TODO: Write your code here.
+  playerSequence.push(color); 
+  const index = playerSequence.length - 1; 
+  const remainingPresses = computerSequence.length - playerSequence.length; 
+  if (computerSequence[index] !== playerSequence[index]) {
+    resetGame("Oops, try again."); 
+    return; 
+  } 
+  else if (remainingPresses === 0) {
+    checkRound(); 
+  } 
 }
 
 /**
@@ -323,7 +334,15 @@ function checkPress(color) {
  */
 
 function checkRound() {
-  // TODO: Write your code here.
+  // TODO: Write your code here. 
+  if (playerSequence.length === maxRoundCount) {
+    resetGame("Congratulations, you won!");  
+  } else {
+  roundCount += 1; 
+  playerSequence = []; 
+  statusSpan.innerHTML = "Nice! Keep going!"; 
+  setTimeout(() => playComputerTurn(), 1000);  
+  }
 }
 
 /**
@@ -337,13 +356,14 @@ function checkRound() {
  */
 function resetGame(text) {
   // TODO: Write your code here.
-
-  // Uncomment the code below:
-  // alert(text);
-  // setText(heading, "Simon Says");
-  // startButton.classList.remove("hidden");
-  // statusSpan.classList.add("hidden");
-  // padContainer.classList.add("unclickable");
+  computerSequence = []; 
+  playerSequence = [];
+  roundCount = 0; 
+  alert(text);
+  setText(heading, "Simon Says");
+  startButton.classList.remove("hidden");
+  statusSpan.classList.add("hidden");
+  padContainer.classList.add("unclickable");
 }
 
 /**
