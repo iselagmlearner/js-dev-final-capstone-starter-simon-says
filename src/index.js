@@ -80,8 +80,8 @@ startButton.addEventListener("click", startButtonHandler);
  *
  */
 function startButtonHandler() {
-  maxRoundCount = setLevel(1); 
-  roundCount = 1; 
+  setLevel(); 
+  roundCount++; 
   startButton.classList.add("hidden"); 
   statusSpan.classList.remove("hidden"); 
   playComputerTurn(); 
@@ -108,7 +108,7 @@ function startButtonHandler() {
 function padHandler(event) {
   const { color } = event.target.dataset;
   if (!color) return;
-  const pad = pads.find(p => p.color === color); 
+  const pad = pads.find(pad => pad.color == color); 
   pad.sound.play(); 
   checkPress(color); 
   return color;
@@ -140,21 +140,18 @@ function padHandler(event) {
  *
  */
 function setLevel(level = 1) {
-  if (level === 1) {
-    return 8;
-  }
-  else if (level === 2) {
-    return 14;
-  }
-  else if (level === 3) {
-    return 20; 
-  }
-  else if (level === 4) {
-    return 31;
-  }
-  else {
-    return "Please enter level 1, 2, 3, or 4"
-  }
+  switch(level) {
+    case 1: 
+      return 8; 
+    case 2:
+      return 14; 
+    case 3:
+      return 20; 
+    case 4:
+      return 31
+    default: 
+      return "Please enter Level 1, 2, 3, or 4"; 
+  } 
 }  
 
 /**
@@ -201,7 +198,7 @@ function setText(element, text) {
  */
 
 function activatePad(color) {
-  const pad = pads.find(p => p.color === color);
+  const pad = pads.find(pad => pad.color === color);
   pad.selector.classList.add("activated"); 
   pad.sound.play(); 
   setTimeout(() => pad.selector.classList.remove("activated"), 500); 
@@ -222,8 +219,8 @@ function activatePad(color) {
  */
 
 function activatePads(sequence) {
-  sequence.forEach((color, index) => {
-    setTimeout(() => activatePad(color), index * 600); 
+  sequence.forEach(function(color, index) {
+    setTimeout(() => {activatePad(color)}, index * 600); 
   });
 }
 
@@ -254,7 +251,7 @@ function activatePads(sequence) {
   padContainer.classList.add("unclickable"); 
   setText(statusSpan, "The computer's turn..."); 
   setText(heading, `Round ${roundCount} of ${maxRoundCount}`); 
-  const randomColor = getRandomItem(pads).color; 
+  const randomColor = getRandomItem(["red", "green", "blue", "yellow"]); 
   computerSequence.push(randomColor); 
   activatePads(computerSequence); 
   setTimeout(() => playHumanTurn(roundCount), roundCount * 600 + 1000); // 5
@@ -330,7 +327,7 @@ function checkRound() {
   roundCount = roundCount + 1; 
   playerSequence = []; 
   setText(statusSpan, "Nice! Keep going!"); 
-  setTimeout(() => playComputerTurn(), 1000);  
+  setTimeout(() => {playComputerTurn();}, 1000);  
   }
 }
 
