@@ -108,7 +108,7 @@ function startButtonHandler() {
 function padHandler(event) {
   const { color } = event.target.dataset;
   if (!color) return;
-  const pad = pads.find((pad) => pad.color === color); 
+  const pad = pads.find(p => p.color === color); 
   pad.sound.play(); 
   checkPress(color); 
   return color;
@@ -140,7 +140,6 @@ function padHandler(event) {
  *
  */
 function setLevel(level = 1) {
-  // TODO: Write your code here.
   if (level === 1) {
     return 8;
   }
@@ -150,7 +149,7 @@ function setLevel(level = 1) {
   else if (level === 3) {
     return 20; 
   }
-  else if (level  === 4) {
+  else if (level === 4) {
     return 31;
   }
   else {
@@ -202,10 +201,10 @@ function setText(element, text) {
  */
 
 function activatePad(color) {
-  const pad = pads.find((p) => p.color === color);
+  const pad = pads.find(p => p.color === color);
   pad.selector.classList.add("activated"); 
   pad.sound.play(); 
-  setTimeout(() => {pad.selector.classList.remove("activated");}, 500); 
+  setTimeout(() => pad.selector.classList.remove("activated"), 500); 
 }
 
 /**
@@ -299,11 +298,12 @@ function checkPress(color) {
   playerSequence.push(color); 
   const index = playerSequence.length - 1; 
   const remainingPresses = computerSequence.length - playerSequence.length; 
+  setText(statusSpan, `Player has ${remainingPresses} presses remaining`); 
   if (computerSequence[index] !== playerSequence[index]) {
     resetGame("Oops, try again."); 
     return; 
   } 
-  else if (remainingPresses === 0) {
+  if (remainingPresses === 0) {
     checkRound(); 
   } 
 }
@@ -327,9 +327,9 @@ function checkRound() {
   if (playerSequence.length === maxRoundCount) {
     resetGame("Congratulations, you won!");  
   } else {
-  roundCount += 1; 
+  roundCount = roundCount + 1; 
   playerSequence = []; 
-  statusSpan.innerHTML = "Nice! Keep going!"; 
+  setText(statusSpan, "Nice! Keep going!"); 
   setTimeout(() => playComputerTurn(), 1000);  
   }
 }
