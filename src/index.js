@@ -108,7 +108,7 @@ function startButtonHandler() {
 function padHandler(event) {
   const { color } = event.target.dataset;
   if (!color) return;
-  const pad = pads.find(pad => pad.color == color); 
+  const pad = pads.find(pad => pad.color === color); 
   pad.sound.play(); 
   checkPress(color); 
   return color;
@@ -201,7 +201,7 @@ function activatePad(color) {
   const pad = pads.find(pad => pad.color === color);
   pad.selector.classList.add("activated"); 
   pad.sound.play(); 
-  setTimeout(() => pad.selector.classList.remove("activated"), 500); 
+  setTimeout(() => {pad.selector.classList.remove("activated");}, 500); 
 }
 
 /**
@@ -219,9 +219,11 @@ function activatePad(color) {
  */
 
 function activatePads(sequence) {
-  sequence.forEach(function(color, index) {
-    setTimeout(() => {activatePad(color)}, index * 600); 
-  });
+  let delay = 600; 
+  sequence.forEach((color, index) => {
+    setTimeout(() => {activatePad(color)}, delay);
+    delay = delay + 600;  
+  }); 
 }
 
 /**
@@ -323,13 +325,15 @@ function checkPress(color) {
 function checkRound() { 
   if (playerSequence.length === maxRoundCount) {
     resetGame("Congratulations, you won!");  
-  } else {
-  roundCount = roundCount + 1; 
+    return; 
+  }
+  roundCount++; 
   playerSequence = []; 
+  
   setText(statusSpan, "Nice! Keep going!"); 
   setTimeout(() => {playComputerTurn();}, 1000);  
   }
-}
+
 
 /**
  * Resets the game. Called when either the player makes a mistake or wins the game.
