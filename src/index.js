@@ -80,7 +80,7 @@ startButton.addEventListener("click", startButtonHandler);
  *
  */
 function startButtonHandler() {
-  setLevel(); 
+  maxRoundCount = setLevel(1); 
   roundCount++; 
   startButton.classList.add("hidden"); 
   statusSpan.classList.remove("hidden"); 
@@ -140,17 +140,20 @@ function padHandler(event) {
  *
  */
 function setLevel(level = 1) {
-  switch(level) {
-    case 1: 
-      return 8; 
-    case 2:
-      return 14; 
-    case 3:
-      return 20; 
-    case 4:
-      return 31
-    default: 
-      return "Please enter Level 1, 2, 3, or 4"; 
+  if (level === 1) {
+    return 8;
+  }
+  else if (level === 2) {
+    return 14;
+  }
+  else if (level === 3) {
+    return 20; 
+  }
+  else if (level === 4) {
+    return 31;
+  }
+  else {
+    return "Please enter level 1, 2, 3, or 4"
   } 
 }  
 
@@ -201,7 +204,7 @@ function activatePad(color) {
   const pad = pads.find(pad => pad.color === color);
   pad.selector.classList.add("activated"); 
   pad.sound.play(); 
-  setTimeout(() => {pad.selector.classList.remove("activated");}, 500); 
+  setTimeout(() => pad.selector.classList.remove("activated"), 500); 
 }
 
 /**
@@ -221,7 +224,7 @@ function activatePad(color) {
 function activatePads(sequence) {
   let delay = 600; 
   sequence.forEach((color, index) => {
-    setTimeout(() => {activatePad(color)}, delay);
+    setTimeout(() => activatePad(color), delay);
     delay = delay + 600;  
   }); 
 }
