@@ -81,8 +81,10 @@ startButton.addEventListener("click", startButtonHandler);
  */
 function startButtonHandler() {
   maxRoundCount = setLevel(1); 
+  /* increasing the roundCount by 1 */
   roundCount++; 
   startButton.classList.add("hidden"); 
+  /* undiding the status element */
   statusSpan.classList.remove("hidden"); 
   playComputerTurn(); 
   return { startButton, statusSpan };
@@ -108,7 +110,9 @@ function startButtonHandler() {
 function padHandler(event) {
   const { color } = event.target.dataset;
   if (!color) return;
+ /* retrieving the pads array and storring it into pad*/
   const pad = pads.find(pad => pad.color === color); 
+ /* play the sound corresponding to the selected pad*/
   pad.sound.play(); 
   checkPress(color); 
   return color;
@@ -139,6 +143,7 @@ function padHandler(event) {
  * setLevel(8) //> returns "Please enter level 1, 2, 3, or 4";
  *
  */
+/* sets the default level of the game to 1 and offers other options*/
 function setLevel(level = 1) {
   if (level === 1) {
     return 8;
@@ -182,7 +187,7 @@ function getRandomItem(collection) {
  * Sets the status text of a given HTML element with a given a message
  */
 function setText(element, text) {
-  // Returning the text content of element.
+  /* returning the text content of the element */
   element.textContent = text; 
   return element;
 }
@@ -199,7 +204,9 @@ function setText(element, text) {
  *
  * 4. After 500ms, remove the `"activated"` class from the pad
  */
-
+/* activates a pad by retrieving the pad, activating the selected pad then playing its sound.  
+* Then removing the activated class from the pad.
+ */
 function activatePad(color) {
   const pad = pads.find(pad => pad.color === color);
   pad.selector.classList.add("activated"); 
@@ -222,7 +229,9 @@ function activatePad(color) {
  */
 
 function activatePads(sequence) {
+ /* sets the delay  */
   let delay = 600; 
+  /* Iterate over the sequence array and have the delay increase by 600ms*/
   sequence.forEach((color, index) => {
     setTimeout(() => activatePad(color), delay);
     delay = delay + 600;  
@@ -253,9 +262,13 @@ function activatePads(sequence) {
  * sequence.
  */
  function playComputerTurn() {
+  /* the padContainer is now unclickable */
   padContainer.classList.add("unclickable"); 
+  /* shows the player that it is the computer's turn */
   setText(statusSpan, "The computer's turn..."); 
+  /* shows player how many rounds are left */
   setText(heading, `Round ${roundCount} of ${maxRoundCount}`); 
+  /* getting a randomColor and pushing the randomColor to the computerSequence array*/
   const randomColor = getRandomItem(["red", "green", "blue", "yellow"]); 
   computerSequence.push(randomColor); 
   activatePads(computerSequence); 
@@ -269,6 +282,7 @@ function activatePads(sequence) {
  *
  * 2. Display a status message showing the player how many presses are left in the round
  */
+/* the padContainer is now clickable and staus shows that is it the players turn */
 function playHumanTurn() {
   padContainer.classList.remove("unclickable");
   setText(statusSpan, `Player's turn: ${computerSequence.length - playerSequence.length} presses remaining`); 
@@ -297,14 +311,18 @@ function playHumanTurn() {
  *
  */
 function checkPress(color) {
+  /* adding the color variable to playerSequence array*/
   playerSequence.push(color); 
   const index = playerSequence.length - 1; 
+ /* calculates how many presses are left and prints sets the status to show how many*/
   const remainingPresses = computerSequence.length - playerSequence.length; 
   setText(statusSpan, `Player has ${remainingPresses} presses remaining`); 
+ /* resets the game because the players turn did not match the computers turn*/
   if (computerSequence[index] !== playerSequence[index]) {
     resetGame("Oops, try again."); 
     return; 
   } 
+  /* calls the checkRound function if no presses are left */
   if (remainingPresses === 0) {
     checkRound(); 
   } 
@@ -322,9 +340,7 @@ function checkPress(color) {
  * - And `playComputerTurn()` is called after 1000 ms (using setTimeout()). The delay
  * is to allow the user to see the success message. Otherwise, it will not appear at
  * all because it will get overwritten.
- *
  */
-
 function checkRound() { 
   if (playerSequence.length === maxRoundCount) {
     resetGame("Congratulations, you won!");  
